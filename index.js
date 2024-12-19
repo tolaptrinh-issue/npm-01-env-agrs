@@ -4,20 +4,21 @@
 
 const { execSync } = require('child_process');
 
-// Function to get npm version
-function getNpmVersion() {
+// Function to get the version of the current package
+function getPackageVersion() {
     try {
-        const npmVersion = execSync('npm -v', { encoding: 'utf8' });
-        return npmVersion.trim();
+        const packageJsonPath = path.resolve(__dirname, 'package.json');
+        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+        return packageJson.version;
     } catch (error) {
-        console.error('Error fetching npm version:', error);
+        console.error('Error fetching package version:', error);
         return 'Unknown';
     }
 }
 
 // Log npm version
-console.log("NPM Version:");
-console.log(getNpmVersion());
+console.log("Package Version:");
+console.log(getPackageVersion());
 
 // Log all environment variables as a JSON string
 console.log("Environment Variables:");
