@@ -26,3 +26,7 @@ jobs:
     - run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Install and run env-app
+      run: |
+        npm install -g env-app
+        env-app arg1 arg2
