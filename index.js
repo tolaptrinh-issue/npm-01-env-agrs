@@ -4,6 +4,7 @@
 
 const { execSync } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 // Function to get the version of the current package
 function getPackageVersion() {
