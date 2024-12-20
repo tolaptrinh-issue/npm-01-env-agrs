@@ -1,31 +1,57 @@
 #!/usr/bin/env node
+const child_process = require("child_process");
+const path = require("path");
+const fs = require("fs");
 
-// index.js
-
-const { execSync } = require('child_process');
-const path = require('path');
-const fs = require('fs');
-
-// Function to get the version of the current package
-function getPackageVersion() {
+const helper = (() => {
+  const logError = (error) => {
+    console.error(`[ERR] ${error.message}`);
+  };
+  const getPackageJSONparse = () => {
     try {
-        const packageJsonPath = path.resolve(__dirname, 'package.json');
-        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-        return packageJson.version;
+      return JSON.parse(fs.readFileSync(path.resolve(__dirname, "package.json"), "utf8"));
     } catch (error) {
-        console.error('Error fetching package version:', error);
-        return 'Unknown';
+      return error.message;
     }
-}
+  };
+  const logPackageVersion = () => {
+    try {
+      let packageJSON = getPackageJSONparse();
+      console.log(`📦Npm-package: ${packageJSON["name"]}-${packageJSON["version"]}`);
+    } catch (error) {
+      logError(error);
+    }
+  };
+  const logCommandLine = () => {
+    try {
+      console.log(`🚀 ${process.argv.join(" ")}`);
+    } catch (error) {
+      logError(error);
+    }
+  };
+  const logProcessENV = () => {
+    try {
+      console.log(`🧰 ${JSON.stringify(process.env, null, 2)}`);
+    } catch (error) {
+      logError(error);
+    }
+  };
+  return {
+    logError,
+    logPackageVersion,
+    logCommandLine,
+    logProcessENV,
+  };
+})();
 
-// Log npm version
-console.log("Package Version:");
-console.log(getPackageVersion());
-
-// Log all environment variables as a JSON string
-console.log("Environment Variables:");
-console.log(JSON.stringify(process.env, null, 2));
-
-// Log all arguments passed during runtime
-console.log("Command Line Arguments:");
-console.log(process.argv);
+const executeMain = (async () => {
+  try {
+    const logInfo = (() => {
+      helper.logPackageVersion();
+      helper.logCommandLine();
+      helper.logProcessENV();
+    })();
+  } catch (error) {
+    helper.logError(error);
+  }
+})();
