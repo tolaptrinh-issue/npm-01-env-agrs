@@ -1,6 +1,6 @@
 {
   "name": "env-app",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A simple Node.js app to show environment variables and command line arguments.",
   "main": "index.js",
   "scripts": {
